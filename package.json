@@ -1,6 +1,6 @@
 {
   "name": "juca-base-service",
-  "version": "1.0.9",
+  "version": "1.0.11",
   "description": "Base Service",
   "author": {
     "name": "Juca.dev",
@@ -14,7 +14,7 @@
   ],
   "scripts": {
     "clean": "rm -rf dist",
-    "build": "tsc --declaration",
+    "build": "tsc",
     "preversion": "npm run build"
   },
   "repository": {
