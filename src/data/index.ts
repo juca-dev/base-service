@@ -42,6 +42,7 @@ export {
   IBaseConstructor as IDataConstructor,
   IUpdReq as IDataUpdReq,
   IBasePagingReq as IDataPagingReq,
+  IGetByIdReq as IDataGetByIdReq,
 };
 
 export default abstract class DataService<

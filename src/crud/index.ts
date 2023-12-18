@@ -34,6 +34,8 @@ export {
   IModelReq as ICrudReq,
   IPersistedReq as ICrudPersistedReq,
   Status as CrudStatus,
+  IGetByIdReq as ICrudGetByIdReq,
+  IPagingReq as ICrudPagingReq,
 };
 
 export default abstract class CrudService<
