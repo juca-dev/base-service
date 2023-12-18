@@ -33,10 +33,6 @@ export default class Logger {
     }
   }
   async error(message: string, data?: any, userId?: string) {
-    if (process.env.DEBUG !== "true") {
-      return;
-    }
-
     if (data?.err instanceof Error) {
       data.err = (data.err as Error).message;
     }
@@ -46,6 +42,9 @@ export default class Logger {
       data
     );
 
+    if (process.env.DEBUG !== "true") {
+      return;
+    }
     this.emitter?.pub(LOGGER_EV.ERROR, {
       app: this.id,
       data,
@@ -71,15 +70,14 @@ export default class Logger {
     } as ILogInfoReq);
   }
   async warn(message: string, data?: any, userId?: string) {
-    if (process.env.DEBUG !== "true") {
-      return;
-    }
-
     console.warn(
       `[${new Date().toISOString().substring(11)} ${this.id}]`,
       message,
       data
     );
+    if (process.env.DEBUG !== "true") {
+      return;
+    }
 
     this.emitter?.pub(LOGGER_EV.WARN, {
       app: this.id,
