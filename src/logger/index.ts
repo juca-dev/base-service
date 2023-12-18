@@ -1,3 +1,12 @@
+import { EmitterService } from "emitter";
+import { ILogErrorReq, ILogInfoReq, ILogWarnReq } from "./interface";
+
+enum KEY {
+  ERROR = "LOG_ERROR",
+  INFO = "LOG_INFO",
+  WARN = "LOG_WARN",
+}
+
 export default class Logger {
   private readonly id: string;
   constructor(id: string) {
@@ -34,6 +43,13 @@ export default class Logger {
       message,
       data
     );
+
+    EmitterService.pub(KEY.ERROR, {
+      app: this.id,
+      data,
+      message,
+      userId,
+    } as ILogErrorReq);
   }
   async info(message: string, data?: any, userId?: string) {
     if (process.env.DEBUG !== "true") {
@@ -44,6 +60,13 @@ export default class Logger {
       message,
       data
     );
+
+    EmitterService.pub(KEY.INFO, {
+      app: this.id,
+      data,
+      message,
+      userId,
+    } as ILogInfoReq);
   }
   async warn(message: string, data?: any, userId?: string) {
     if (process.env.DEBUG !== "true") {
@@ -55,6 +78,13 @@ export default class Logger {
       message,
       data
     );
+
+    EmitterService.pub(KEY.WARN, {
+      app: this.id,
+      data,
+      message,
+      userId,
+    } as ILogWarnReq);
   }
 }
 

@@ -13,6 +13,10 @@
     "logger"
   ],
   "author": "juca.dev",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/juca-dev/base-service"
+  },
   "license": "MIT",
   "dependencies": {
     "@aws-sdk/client-dynamodb": "^3.474.0",
