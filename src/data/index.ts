@@ -51,8 +51,8 @@ export default abstract class DataService<
   private readonly cache: {
     [key: string]: any;
   };
-  protected constructor({ id }: IBaseConstructor) {
-    super({ id });
+  protected constructor({ id, emitter }: IBaseConstructor) {
+    super({ id, emitter });
     this.table = `${this.app}.${id}`;
     this.cache = {};
   }

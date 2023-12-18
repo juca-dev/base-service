@@ -40,8 +40,8 @@ export default abstract class CrudService<
   T extends IModel
 > extends DataService<T> {
   private readonly schema: any;
-  protected constructor({ id, schema }: ICrudConstructor) {
-    super({ id });
+  protected constructor({ id, emitter, schema }: ICrudConstructor) {
+    super({ id, emitter });
     this.schema = schema;
   }
 

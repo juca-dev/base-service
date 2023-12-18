@@ -1,12 +1,15 @@
 {
   "name": "juca-base-service",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "description": "Base Service",
   "author": {
     "name": "Juca.dev",
     "url": "https://juca.dev/"
   },
   "main": "dist/index.js",
+  "files": [
+    "src"
+  ],
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },

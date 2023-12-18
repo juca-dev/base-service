@@ -2,7 +2,7 @@ import EventEmitter from "events";
 
 const emitter = new EventEmitter();
 
-class EmitterService {
+abstract class BaseEmitter {
   pub(id: string, ...args: any[]) {
     return emitter.emit(id, args);
   }
@@ -11,5 +11,4 @@ class EmitterService {
   }
 }
 
-const service = new EmitterService();
-export { service as EmitterService };
+export { BaseEmitter };

@@ -1,7 +1,7 @@
-import { EmitterService } from "emitter";
+import { BaseEmitter } from "../emitter";
 import { ILogErrorReq, ILogInfoReq, ILogWarnReq } from "./interface";
 
-enum KEY {
+export enum LOGGER_EV {
   ERROR = "LOG_ERROR",
   INFO = "LOG_INFO",
   WARN = "LOG_WARN",
@@ -9,8 +9,10 @@ enum KEY {
 
 export default class Logger {
   private readonly id: string;
-  constructor(id: string) {
+  private readonly emitter?: BaseEmitter;
+  constructor(id: string, emitter?: BaseEmitter) {
     this.id = id;
+    this.emitter = emitter;
   }
 
   debug(data: any, ...opt: any[]) {
@@ -44,7 +46,7 @@ export default class Logger {
       data
     );
 
-    EmitterService.pub(KEY.ERROR, {
+    this.emitter?.pub(LOGGER_EV.ERROR, {
       app: this.id,
       data,
       message,
@@ -61,7 +63,7 @@ export default class Logger {
       data
     );
 
-    EmitterService.pub(KEY.INFO, {
+    this.emitter?.pub(LOGGER_EV.INFO, {
       app: this.id,
       data,
       message,
@@ -79,7 +81,7 @@ export default class Logger {
       data
     );
 
-    EmitterService.pub(KEY.WARN, {
+    this.emitter?.pub(LOGGER_EV.WARN, {
       app: this.id,
       data,
       message,

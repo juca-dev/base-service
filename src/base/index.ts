@@ -7,13 +7,13 @@ export default abstract class BaseService {
   protected readonly app: string;
   protected readonly id: string;
   protected readonly log: Logger;
-  protected constructor({ id }: IBaseConstructor) {
+  protected constructor({ id, emitter }: IBaseConstructor) {
     if (!process.env.APP) {
       throw ENV_REQUIRED("APP");
     }
     this.id = id;
     this.app = process.env.APP;
-    this.log = new Logger(id);
+    this.log = new Logger(id, emitter);
   }
   protected generateUUID(): string {
     return Crypto.randomUUID();
