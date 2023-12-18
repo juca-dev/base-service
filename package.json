@@ -1,0 +1,24 @@
+{
+  "name": "@juca/base-service",
+  "version": "1.0.0",
+  "description": "Base Service",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [
+    "schema",
+    "database",
+    "crud",
+    "logger"
+  ],
+  "author": "juca.dev",
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/client-dynamodb": "^3.474.0",
+    "@aws-sdk/util-dynamodb": "^3.474.0"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.5"
+  }
+}
