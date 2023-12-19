@@ -42,7 +42,7 @@ export default class Logger {
       data
     );
 
-    if (process.env.DEBUG !== "true") {
+    if (process.env.DEBUG === "true") {
       return;
     }
     this.emitter?.pub(LOGGER_EV.ERROR, {
@@ -53,7 +53,7 @@ export default class Logger {
     } as ILogErrorReq);
   }
   async info(message: string, data?: any, userId?: string) {
-    if (process.env.DEBUG !== "true") {
+    if (process.env.DEBUG === "true") {
       return;
     }
     console.info(
@@ -75,7 +75,7 @@ export default class Logger {
       message,
       data
     );
-    if (process.env.DEBUG !== "true") {
+    if (process.env.DEBUG === "true") {
       return;
     }
 
