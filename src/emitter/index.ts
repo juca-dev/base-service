@@ -11,7 +11,7 @@ abstract class BaseEmitter {
 
   async pub(id: string, ...args: any[]) {
     const res = emitter.emit(id, args);
-    console.log("pub", res);
+    console.log("pub", { res, args });
     if (res) {
       await this.delay(150); // delay to wait subscribed
     }
