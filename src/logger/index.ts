@@ -36,55 +36,67 @@ export default class Logger {
     if (data?.err instanceof Error) {
       data.err = (data.err as Error).message;
     }
-    console.error(
-      `[${new Date().toISOString().substring(11)} ${this.id}]`,
-      message,
-      data
-    );
 
     if (process.env.DEBUG === "true") {
+      console.error(
+        `[${new Date().toISOString().substring(11)} ${this.id}]`,
+        message,
+        data
+      );
       return;
     }
-    this.emitter?.pub(LOGGER_EV.ERROR, {
-      app: this.id,
-      data,
-      message,
-      userId,
-    } as ILogErrorReq);
+    try {
+      await this.emitter?.pub(LOGGER_EV.ERROR, {
+        app: this.id,
+        data,
+        message,
+        userId,
+      } as ILogErrorReq);
+    } catch (err) {
+      console.error(err);
+    }
   }
   async info(message: string, data?: any, userId?: string) {
     if (process.env.DEBUG === "true") {
+      console.info(
+        `[${new Date().toISOString().substring(11)} ${this.id}]`,
+        message,
+        data
+      );
       return;
     }
-    console.info(
-      `[${new Date().toISOString().substring(11)} ${this.id}]`,
-      message,
-      data
-    );
 
-    this.emitter?.pub(LOGGER_EV.INFO, {
-      app: this.id,
-      data,
-      message,
-      userId,
-    } as ILogInfoReq);
+    try {
+      await this.emitter?.pub(LOGGER_EV.INFO, {
+        app: this.id,
+        data,
+        message,
+        userId,
+      } as ILogInfoReq);
+    } catch (err) {
+      console.error(err);
+    }
   }
   async warn(message: string, data?: any, userId?: string) {
-    console.warn(
-      `[${new Date().toISOString().substring(11)} ${this.id}]`,
-      message,
-      data
-    );
     if (process.env.DEBUG === "true") {
+      console.warn(
+        `[${new Date().toISOString().substring(11)} ${this.id}]`,
+        message,
+        data
+      );
       return;
     }
 
-    this.emitter?.pub(LOGGER_EV.WARN, {
-      app: this.id,
-      data,
-      message,
-      userId,
-    } as ILogWarnReq);
+    try {
+      await this.emitter?.pub(LOGGER_EV.WARN, {
+        app: this.id,
+        data,
+        message,
+        userId,
+      } as ILogWarnReq);
+    } catch (err) {
+      console.error(err);
+    }
   }
 }
 
