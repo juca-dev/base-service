@@ -506,8 +506,9 @@ export default abstract class CrudService<
       })
     );
 
-    await super.transWriteItems(trans);
+    const res = await super.transWriteItems(trans);
     this.log.debug("OUT createByBatch");
+    return res;
   }
   async listByIds({ ids, fields }: IListByIdsReq): Promise<T[]> {
     const res = await super.listItemsByIds({ ids, fields });

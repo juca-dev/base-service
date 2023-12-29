@@ -111,7 +111,7 @@ export default abstract class DataService<
     }
     const conds: string[] = [];
     names[`#kr`] = sort.name;
-    if (sort.from && sort.to) {
+    if (sort.from !== undefined && sort.to !== undefined) {
       if (sort.from === sort.to) {
         values[`:krv`] = sort.to;
         conds.push(`#kr=:krv`);
@@ -120,10 +120,10 @@ export default abstract class DataService<
         values[`:krv1`] = sort.to;
         conds.push(`#kr BETWEEN :krv0 AND :krv1`);
       }
-    } else if (sort.from) {
+    } else if (sort.from !== undefined) {
       values[`:krv`] = sort.from;
       conds.push(`#kr>=:krv`);
-    } else if (sort.to) {
+    } else if (sort.to !== undefined) {
       values[`:krv`] = sort.to;
       conds.push(`#kr<=:krv`);
     } else {
