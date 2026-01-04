@@ -84,6 +84,7 @@ export interface IModelReq<T extends IDataModel> extends IPersistedReq {
 export interface IUpdReq<T extends IDataModel> extends IModelReq<T> {
   setExps?: string[];
   delExps?: string[];
+  addExps?: string[];
 }
 
 export interface IDelByIdReq extends IPersistedReq {
@@ -92,4 +93,10 @@ export interface IDelByIdReq extends IPersistedReq {
 }
 export interface IPersistedReq {
   id: string;
+}
+export interface IUpdateCounterReq extends IPersistedReq {
+  fieldPath: string;
+  delta: number;
+  min?: number;
+  mustExist?: boolean;
 }

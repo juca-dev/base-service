@@ -12,6 +12,7 @@ import {
   TransactGetItemsCommandOutput,
   TransactWriteItem,
   Update,
+  UpdateItemCommandInput,
 } from "@aws-sdk/client-dynamodb";
 import { unmarshall, marshall } from "@aws-sdk/util-dynamodb";
 
@@ -32,6 +33,7 @@ import {
   IDelByIdReq,
   IUpdReq,
   IBasePagingReq,
+  IUpdateCounterReq,
 } from "./interface";
 import { BaseService, IBaseConstructor } from "../base";
 
@@ -299,6 +301,7 @@ export default abstract class DataService<
     names = {},
     setExps,
     delExps,
+    addExps,
   }: IUpdReq<T>) {
     const params = this.updItemTrans({
       id,
@@ -308,6 +311,7 @@ export default abstract class DataService<
       names,
       setExps,
       delExps,
+      addExps,
     });
 
     await ddb.updateItem(params);
@@ -532,9 +536,11 @@ export default abstract class DataService<
     values = {},
     setExps,
     delExps,
+    addExps,
   }: IUpdReq<T>) {
     const toSet: string[] = setExps || [];
     const toDel: string[] = delExps || [];
+    const toAdd: string[] = addExps || [];
     let k;
     for (let e in model) {
       const val = model[e];
@@ -558,6 +564,9 @@ export default abstract class DataService<
     }
     if (toDel.length) {
       exp += ` REMOVE ${toDel.join(",")}`;
+    }
+    if (toAdd.length) {
+      exp += ` ADD ${toAdd.join(",")}`;
     }
     exp = exp.trim();
 
@@ -586,6 +595,7 @@ export default abstract class DataService<
     values,
     setExps,
     delExps,
+    addExps,
   }: IUpdReq<T>) {
     const res: TransactWriteItem = {
       Update: this.updItemTrans({
@@ -596,6 +606,7 @@ export default abstract class DataService<
         values,
         setExps,
         delExps,
+        addExps,
       }),
     };
     return res;
@@ -701,5 +712,64 @@ export default abstract class DataService<
 
     await this.transWriteItems(trans);
     this.log.debug("OUT delByIds");
+  }
+
+  protected async updateCounter({
+    id,
+    fieldPath,
+    delta,
+    min,
+    mustExist,
+  }: IUpdateCounterReq): Promise<number> {
+    if (delta === 0) {
+      throw new Error("DELTA_ZERO_NOT_ALLOWED");
+    }
+
+    const parts = fieldPath.split(".");
+    const names: Record<string, string> = {};
+    const path = parts
+      .map((p, i) => {
+        const k = `#f${i}`;
+        names[k] = p;
+        return k;
+      })
+      .join(".");
+
+    const values: Record<string, any> = {
+      ":delta": delta,
+    };
+
+    let ConditionExpression = "attribute_exists(id)";
+
+    if (mustExist) {
+      ConditionExpression = `AND attribute_exists(${path})`;
+    }
+
+    if (typeof min === "number") {
+      values[":min"] = min;
+      ConditionExpression = ConditionExpression
+        ? `${ConditionExpression} AND ${path} >= :min`
+        : `${path} >= :min`;
+    }
+
+    const command: UpdateItemCommandInput = {
+      TableName: this.table,
+      Key: marshall({ id }),
+      UpdateExpression: `ADD ${path} :delta`,
+      ExpressionAttributeNames: names,
+      ExpressionAttributeValues: values,
+      ConditionExpression,
+      ReturnValues: "UPDATED_NEW",
+    };
+    this.log.debug("updateCounter", { command });
+
+    const res = await ddb.updateItem(command);
+
+    let current: any = res.Attributes;
+    for (const p of parts) {
+      current = current?.[p];
+    }
+
+    return current;
   }
 }
