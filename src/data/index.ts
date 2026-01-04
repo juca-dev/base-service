@@ -742,7 +742,7 @@ export default abstract class DataService<
     let ConditionExpression = "attribute_exists(id)";
 
     if (mustExist) {
-      ConditionExpression = `AND attribute_exists(${path})`;
+      ConditionExpression = `${ConditionExpression} AND attribute_exists(${path})`;
     }
 
     if (typeof min === "number") {
@@ -757,7 +757,9 @@ export default abstract class DataService<
       Key: marshall({ id }),
       UpdateExpression: `ADD ${path} :delta`,
       ExpressionAttributeNames: names,
-      ExpressionAttributeValues: values,
+      ExpressionAttributeValues: marshall(values, {
+        removeUndefinedValues: true,
+      }),
       ConditionExpression,
       ReturnValues: "UPDATED_NEW",
     };
@@ -765,7 +767,10 @@ export default abstract class DataService<
 
     const res = await ddb.updateItem(command);
 
-    let current: any = res.Attributes;
+    if (!res.Attributes) {
+      return 0;
+    }
+    let current: any = unmarshall(res.Attributes);
     for (const p of parts) {
       current = current?.[p];
     }

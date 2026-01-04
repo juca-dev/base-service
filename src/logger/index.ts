@@ -20,13 +20,13 @@ export default class Logger {
       return;
     }
     if (opt.length) {
-      console.log(
+      console.debug(
         `[${new Date().toISOString().substring(11)} ${this.id}]`,
         data,
         ...opt
       );
     } else {
-      console.log(
+      console.debug(
         `[${new Date().toISOString().substring(11)} ${this.id}]`,
         data
       );
