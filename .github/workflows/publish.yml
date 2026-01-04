@@ -25,6 +25,6 @@ jobs:
       - name: Build project (if needed)
         run: npm run build # Run your build command, if applicable
       - name: Publish package
-        run: npm publish --access public # The core publish command
+        run: npm publish --otp=123456 # The core publish command
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }} # Authenticate using the secret
