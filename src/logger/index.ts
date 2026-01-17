@@ -19,17 +19,15 @@ export default class Logger {
     if (process.env.DEBUG !== "true") {
       return;
     }
+    const now = new Date();
     if (opt.length) {
       console.debug(
-        `[${new Date().toISOString().substring(11)} ${this.id}]`,
+        `[${now.toISOString().substring(11)} ${this.id}]`,
         data,
-        ...opt
+        ...opt,
       );
     } else {
-      console.debug(
-        `[${new Date().toISOString().substring(11)} ${this.id}]`,
-        data
-      );
+      console.debug(`[${now.toISOString().substring(11)} ${this.id}]`, data);
     }
   }
   async error(message: string, data?: any, userId?: string) {
@@ -37,11 +35,12 @@ export default class Logger {
       data.err = (data.err as Error).message;
     }
 
+    const now = new Date();
     if (process.env.DEBUG === "true") {
       console.error(
-        `[${new Date().toISOString().substring(11)} ${this.id}]`,
+        `[${now.toISOString().substring(11)} ${this.id}]`,
         message,
-        data
+        data,
       );
       return;
     }
@@ -51,17 +50,19 @@ export default class Logger {
         data,
         message,
         userId,
+        create: now.getTime(),
       } as ILogErrorReq);
     } catch (err) {
       console.error(err);
     }
   }
   async info(message: string, data?: any, userId?: string) {
+    const now = new Date();
     if (process.env.DEBUG === "true") {
       console.info(
-        `[${new Date().toISOString().substring(11)} ${this.id}]`,
+        `[${now.toISOString().substring(11)} ${this.id}]`,
         message,
-        data
+        data,
       );
       return;
     }
@@ -72,17 +73,19 @@ export default class Logger {
         data,
         message,
         userId,
+        create: now.getTime(),
       } as ILogInfoReq);
     } catch (err) {
       console.error(err);
     }
   }
   async warn(message: string, data?: any, userId?: string) {
+    const now = new Date();
     if (process.env.DEBUG === "true") {
       console.warn(
-        `[${new Date().toISOString().substring(11)} ${this.id}]`,
+        `[${now.toISOString().substring(11)} ${this.id}]`,
         message,
-        data
+        data,
       );
       return;
     }
@@ -93,6 +96,7 @@ export default class Logger {
         data,
         message,
         userId,
+        create: now.getTime(),
       } as ILogWarnReq);
     } catch (err) {
       console.error(err);
